@@ -148,4 +148,4 @@ Another thing to consider is whether or not to have lazy evaluation.
 
 ## Compiler Ideas
 
-One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly.
+One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly. Or it can compile to C and take advantage of the optimizations performed by C compilers. Or straight to LLVM. Idk
