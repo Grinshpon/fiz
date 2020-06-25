@@ -54,10 +54,10 @@ Lists are delineated by square brackets `[a,b,...,z]`
     baz x := let y := x + 5 in y;
 
     positiveSum x y :=
-	    let
-		    x' := max x 0;
-		    y' := max y 0;
-	    in x' + y';
+      let
+        x' := max x 0;
+        y' := max y 0;
+    in x' + y';
 
 functions are pure unless operating in an io context. I don't know what io or monad situation will look like exactly.
 
@@ -87,16 +87,16 @@ Funcions might have statement-like forms by prefacing additional keywords with `
 Type classes? I'm not sure about this, but type classes could be defined within a `::{..}` block.
 
     MyNum a ::{
-	    a +. a: a;
-	    a -. a: a;
-	    a *. a: a;
-	    a /. a: a;
-	    sign a: Int;
+      a +. a: a;
+      a -. a: a;
+      a *. a: a;
+      a /. a: a;
+      sign a: Int;
     };
 
 And then type class instances are defined via `::= {..}`?
 
     MyNum Int ::= {
-	    x +. y := x+y;
-	    //...
+      x +. y := x+y;
+      //...
     };
