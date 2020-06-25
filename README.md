@@ -39,14 +39,14 @@ Lists are delineated by square brackets `[a,b,...,z]`
 `case` is a builtin that provides pattern matching. `{..}` is a chunk.
 
     myIf c t f := case c {
-	    True -> t;
-	    False -> f;
+      True -> t;
+      False -> f;
     };
 
     bar x y := case x {
-	    5  -> "five"; //x matches with 5
-	    @y -> "eq"; //x matches with the value of the existing variable y
-	    y  -> "x is" ++ (show y); //x is bound to a new variable y, which overshadows the argument
+      5  -> "five"; //x matches with 5
+      @y -> "eq"; //x matches with the value of the existing variable y
+      y  -> "x is" ++ (show y); //x is bound to a new variable y, which overshadows the argument
     };
 
 `let ... in ...` is another builtin that lets you define local immutable variables to use.
@@ -64,10 +64,10 @@ functions are pure unless operating in an io context. I don't know what io or mo
 `do {..}` is an io block where you can write side-effectful code, allowing you to use locally scoped mutable variables `var x := 1; set x := x + 1`
 
     main := do {
-	    var x := 2;
-	    print (bar 1 x);
-	    set x := x+1;
-	    print (bar 3 x);
+      var x := 2;
+      print (bar 1 x);
+      set x := x+1;
+      print (bar 3 x);
     };
 
 Custom types are defined with `::=`
