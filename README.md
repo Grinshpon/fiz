@@ -113,7 +113,7 @@ If a module does not specify what is is exporting, it is assumed to be exporting
 
 ### Style
 
-Fiz uses camelCase for values, and PascalCase for types and modules. File names are lowercase.
+Fiz uses camelCase for variable and function names, and PascalCase for types and modules. This is enforced by the compiler. File names are lowercase.
 
 ### Experimental
 
@@ -141,6 +141,10 @@ And then type class instances are defined via `instance Class T := {...}`?
       x +. y := x+y;
       //...
     };
+    
+The reason I'm skeptical about having type classes is because it will increase the complexity of the language (which is meant to be kept rather simple) and it will make type inference much harder. Essentially, it will require the programmer to write explicit type signatures a lot more. Now that isn't a bad thing at all, in fact it's a good thing for anyone that values type safety (so anyone familiar with functional programming), but in this case it's not desired because, as stated previously, this is meant to be a simple langauge to play around with.
+
+Another thing to consider is whether or not to have lazy evaluation.
 
 ## Compiler Ideas
 
