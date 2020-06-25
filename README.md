@@ -10,43 +10,45 @@ I'll create a formal grammar later, for now it's basically notes.
 
 A .fiz file describes a fiz module, and each fiz module is a series of definitions. Modules are essentially namespaces, a file is a module taking it's name (so importing mod.fiz will give you a module named mod and you can access it's definitions using mod.name). You can also have local modules in a file that act as local namespaces. Also, in any project, there must be a main module containing a main function. 
 
-Fiz does not use whitespace as part of the grammar (like languages such as haskell or python do), and so each definition is separated by a semicolon:
+Top level definitions are made with the `def` keyword. Assignment is done using the operator `:=`. `=` and `==` are synonyms and are used for comparison.
 
-    y := 5;
-
-Assignment is done using the operator `:=`. `=` and `==` are synonyms and are used for comparison.
+    def val := 1;
 
 Functions are defined the same way. Functions are first class and treated like values.
 
-    foo x := x + 5;
+    def foo x := x + 5;
+    
+Fiz does not use whitespace as part of the grammar (like languages such as haskell or python do), and so each definition is separated by a semicolon:
+
+    def y := 5; def x := 6;
 
 Lambda functions are defined with `\ ... -> ...`.
 
-    foo := \x -> x + 5;
+    def foo := \x -> x + 5;
 
 Single line comments are made with `//` and multiline/block comments with `/* ... */`. Block comments can be nested. 
 
 Fiz will be statically typed, but types do not need to be specified most of the time, that's handled by type inference. (WIP) Types can be annotated with `:`
 
-    foo x: Int -> Int := x + (5: Int);
+    def foo x: Int -> Int := x + (5: Int);
     
     //NOTE: alternate potential syntax for type annotations:
-      foo (x: Int): Int := x + (5: Int);
+      def foo (x: Int): Int := x + (5: Int);
 
 Lists are delineated by square brackets `[a,b,...,z]`
 
-    myList := [1,2,3];
+    def myList := [1,2,3];
     
-    myElem := myList # 1; // `#` is a function that retrieves the element at a given index.
+    def myElem := myList # 1; // `#` is a function that retrieves the element at a given index.
 
 `case` is a builtin that provides pattern matching. `{..}` is a chunk.
 
-    myIf c t f := case c {
+    def myIf c t f := case c {
       True -> t;
       False -> f;
     };
 
-    bar x y := case x {
+    def bar x y := case x {
       5  -> "five"; //x matches with 5
       @y -> "eq"; //x matches with the value of the existing variable y
       y  -> "x is" ++ (show y); //x is bound to a new variable y, which overshadows the argument
@@ -54,40 +56,64 @@ Lists are delineated by square brackets `[a,b,...,z]`
 
 `let ... in ...` is another builtin that lets you define local immutable variables to use.
 
-    baz x := let y := x + 5 in y;
+    def baz x := let y := x + 5 in y;
 
-    positiveSum x y :=
+    def positiveSum x y :=
       let
         x' := max x 0;
         y' := max y 0;
-    in x' + y';
+      in x' + y';
 
 functions are pure unless operating in an io context. I don't know what io or monad situation will look like exactly.
 
 `do {..}` is an io block where you can write side-effectful code, allowing you to use locally scoped mutable variables `var x := 1; set x := x + 1`
 
-    main := do {
+    def main := do {
       var x := 2;
       print (bar 1 x);
       set x := x+1;
       print (bar 3 x);
     };
 
-Custom types are defined with `::=`
+Custom types are defined with `type T := ...`.
 
     //Sum types
-    Bool ::= True | False;
-    Maybe a ::= Some a | None;
+    type Bool := True | False;
+    type Maybe a := Some a | None;
     
     //Product type
-    MyType ::= MyType Int Int;
+    type MyType := MyType Int Int;
     
     //Record type
-    Person ::= {
+    type Person := {
       age: Int;
       name: String;
     };
     // record access is done with the dot operator (ex: person.age)
+
+Modules are made with the `module` keyword.
+
+    module Inner := {
+      def innerVal := ...;
+    };
+
+If a module does not specify what is is exporting, it is assumed to be exporting everything. Otherwise, `export` will state what is public and what is private. If a module has an `export`, it must be the first expression.
+
+    //mymod.fiz
+    export {
+      val1;
+      fn1;
+      Inner;
+    };
+    def val1 := ...;
+    def val2 := ...;
+    def fn1 x := ...;
+    def fn2 := ...;
+    module Inner := { ... };
+
+### Style
+
+Fiz uses camelCase for values, and PascalCase for types and modules. File names are lowercase.
 
 ### Experimental
 
@@ -95,23 +121,23 @@ This section contains designs of the language that I'm less comfortable with or 
 
 Funcions might have statement-like forms by prefacing additional keywords with `'` (or some other symbol)
 
-    myIf cond 'myThen f 'myElse g := if cond then f else g;
+    def myIf cond 'myThen f 'myElse g := if cond then f else g;
     
-    isOne x := myIf x = 1 myThen "is one" myElse "is not one";
+    def isOne x := myIf x = 1 myThen "is one" myElse "is not one";
 
-Type classes? I'm not sure about this, but type classes could be defined with `::= {..}`
+Type classes? I'm not sure about this, but type classes could be defined with the `class` keyword.
 
-    MyNum a ::= {
-      a +. a: a;
-      a -. a: a;
-      a *. a: a;
-      a /. a: a;
-      sign a: Int;
+    class MyNum a := {
+      (+.) : a -> a -> a;
+      (-.) : a -> a -> a;
+      (*.) : a -> a -> a;
+      (/.) : a -> a -> a;
+      sign : a -> Int;
     };
 
-And then type class instances are defined via `::{..}`?
+And then type class instances are defined via `instance Class T := {...}`?
 
-    MyNum Int ::{
+    instance MyNum Int := {
       x +. y := x+y;
       //...
     };
