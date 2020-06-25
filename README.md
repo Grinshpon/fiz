@@ -28,7 +28,10 @@ Single line comments are made with `//` and multiline/block comments with `/* ..
 
 Fiz will be statically typed, but types do not need to be specified most of the time, that's handled by type inference. (WIP) Types can be annotated with `:`
 
-    foo x: Int -> Int := (x: Int) + 5;
+    foo x: Int -> Int := x + (5: Int);
+    
+    //NOTE: alternate potential syntax for type annotations:
+      foo (x: Int): Int := x + (5: Int);
 
 Lists are delineated by square brackets `[a,b,...,z]`
 
@@ -72,7 +75,19 @@ functions are pure unless operating in an io context. I don't know what io or mo
 
 Custom types are defined with `::=`
 
+    //Sum types
     Bool ::= True | False;
+    Maybe a ::= Some a | None;
+    
+    //Product type
+    MyType ::= MyType Int Int;
+    
+    //Record type
+    Person ::= {
+      age: Int;
+      name: String;
+    };
+    // record access is done with the dot operator (ex: person.age)
 
 ### Experimental
 
@@ -84,9 +99,9 @@ Funcions might have statement-like forms by prefacing additional keywords with `
     
     isOne x := myIf x = 1 myThen "is one" myElse "is not one";
 
-Type classes? I'm not sure about this, but type classes could be defined within a `::{..}` block.
+Type classes? I'm not sure about this, but type classes could be defined with `::= {..}`
 
-    MyNum a ::{
+    MyNum a ::= {
       a +. a: a;
       a -. a: a;
       a *. a: a;
@@ -94,9 +109,13 @@ Type classes? I'm not sure about this, but type classes could be defined within 
       sign a: Int;
     };
 
-And then type class instances are defined via `::= {..}`?
+And then type class instances are defined via `::{..}`?
 
-    MyNum Int ::= {
+    MyNum Int ::{
       x +. y := x+y;
       //...
     };
+
+## Compiler Ideas
+
+One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly.
