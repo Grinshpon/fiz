@@ -111,6 +111,10 @@ If a module does not specify what is is exporting, it is assumed to be exporting
     def fn2 := ...;
     module Inner := { ... };
 
+An alias is essentially text substitution. Any type (and maybe even keywords) can be aliased.
+
+    alias Age := Int;
+
 ### Style
 
 Fiz uses camelCase for variable and function names, and PascalCase for types and modules. This is enforced by the compiler. File names are lowercase.
