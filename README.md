@@ -1,8 +1,8 @@
 # Fiz
 
-Fiz is a concept for toy programming language designed to be simple and minimal. It's meant for playing around with, and is mainly just an exercise in designing a toy programming language (for fun). It's not a competitor to other serious functional languages, because fiz is probably not a very good language. I just wanted to put my ideas down somewhere. I cannot stress enough how dumb all this probably is.
+Fiz is a concept for a functional programming language. It is an exercise in designing a toy programming language. It's not a competitor to other serious functional languages, because fiz is probably not a very good language. I just wanted to put my ideas down somewhere. I cannot stress enough how dumb all this probably is.
 
-All the design/syntax is work in progress. Once I iterate a couple of times and lock down a grammar I like, I may begin writing a parser and then compiler.
+All the design/syntax is work in progress. Once I iterate a couple of times and lock down a grammar I like, I may begin writing a compiler.
 
 ## Design (WIP)
 
@@ -152,4 +152,6 @@ Another thing to consider is whether or not to have lazy evaluation.
 
 ## Compiler Ideas
 
-One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly. Or it can compile to C and take advantage of the optimizations performed by C compilers. Or straight to LLVM. Idk
+One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly.
+
+A better idea is to target the [GRIN compiler framework](https://github.com/grin-compiler/grin)
