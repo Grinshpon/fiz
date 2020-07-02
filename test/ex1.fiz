@@ -1,0 +1,7 @@
+def x := 5;;
+def y := 1.2;;
+
+def foo := f x y;;
+def t := true;;
+
+def four := + 1 3;;

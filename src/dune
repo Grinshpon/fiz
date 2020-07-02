@@ -1,0 +1,10 @@
+(executable
+  (name fiz)
+  (libraries core menhirLib)
+  (preprocess (pps ppx_jane ppx_deriving.show)))
+
+(ocamllex lexer)
+
+(menhir
+ (flags --explain --table)
+ (modules parser))

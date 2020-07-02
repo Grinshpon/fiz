@@ -1,0 +1,14 @@
+opam-version: "2.0"
+name: "fiz"
+version: "~dev"
+synopsis: "Toy Functional Language"
+maintainer: "grinshpon <grinshpondaniel@protonmail.com>"
+authors: "grinshpon <grinshpondaniel@protonmail.com>"
+license: "MIT"
+depends: ["core" "ppx_jane" "ppx_deriving" "menhir" "menhirLib"]
+build: [
+  ["./configure" "--prefix=%{prefix}%"]
+  [make]
+]
+install: [make "install"]
+dev-repo: "git+https://"
