@@ -3,7 +3,9 @@ def ifn c t f := match c {
   | false -> f;
 };;
 
-def positiveSum x y :=
+-- this is a comment
+
+def positiveSum x y := -- comment after code
   let
     x' := max x 0;
     y' := max y 0;

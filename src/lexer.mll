@@ -21,6 +21,8 @@ let newline = '\r' | '\n' | "\r\n" | "\n\r"
 rule token = parse
   | whitespace
     { token lexbuf }
+  | "--"
+    { comment lexbuf }
   | newline
     { new_line lexbuf; token lexbuf }
   | "def" { DEF }
@@ -51,3 +53,11 @@ rule token = parse
   | operator as o
     { OP o }
   | eof { EOF }
+
+and comment = parse
+  | newline
+    { new_line lexbuf; token lexbuf }
+  | eof
+    { EOF }
+  | _
+    { comment lexbuf }

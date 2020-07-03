@@ -18,6 +18,10 @@ Fiz does not use whitespace as part of the grammar (like languages such as haske
 
     def y := 5;; def x := 6;;
 
+Comments begin with `--` and end at the end of a line. There are no block comments.
+
+    def id x := x;; -- this is a comment
+
 Lambda functions are defined with `\ ... -> ...`.
 
     def foo := \x -> x + 5;;
@@ -26,7 +30,7 @@ Lists are delineated by square brackets `[a,b,...,z]`
 
     def myList := [1,2,3];;
 
-    def myElem := myList # 1; // `#` is a function that retrieves the element at a given index.
+    def myElem := myList # 1; -- `#` is a function that retrieves the element at a given index.
 
 `match` is a builtin that provides pattern matching. `{..}` is a chunk.
 
@@ -36,9 +40,9 @@ Lists are delineated by square brackets `[a,b,...,z]`
     };;
 
     def bar x y := match x {
-      5  -> "five"; //x matches with 5
-      @y -> "eq"; //experimental: x matches with the value of the existing variable y
-      y  -> "x is" ++ (show y); //x is bound to a new variable y, which overshadows the argument
+      5  -> "five"; --x matches with 5
+      @y -> "eq"; --experimental: x matches with the value of the existing variable y
+      y  -> "x is" ++ (show y); --x is bound to a new variable y, which overshadows the argument
     };;
 
 `let ... in ...` is another builtin that lets you define local immutable variables to use.
@@ -64,19 +68,19 @@ functions are pure unless operating in an io context. I don't know what io or mo
 
 Custom types are defined with `type T := ...`.
 
-    //Sum types
+    --Sum types
     type Bool := True | False;
     type Maybe a := Some a | None;
 
-    //Product type
+    --Product type
     type MyType := MyType Int Int;
 
-    //Record type
+    --Record type
     type Person := {
       age: Int;
       name: String;
     };;
-    // record access is done with the dot operator (ex: person.age)
+    -- record access is done with the dot operator (ex: person.age)
 
 Modules are made with the `module` keyword.
 
@@ -86,7 +90,7 @@ Modules are made with the `module` keyword.
 
 If a module does not specify what is is exporting, it is assumed to be exporting everything. Otherwise, `export` will state what is public and what is private. If a module has an `export`, it must be the first expression.
 
-    //mymod.fiz
+    --mymod.fiz
     export {
       val1;
       fn1;
@@ -121,7 +125,7 @@ Fiz will be statically typed, but types do not need to be specified most of the 
 
     def foo x: Int -> Int := x + (5: Int);;
 
-    //NOTE: alternate potential syntax for type annotations:
+    --NOTE: alternate potential syntax for type annotations:
       def foo (x: Int): Int := x + (5: Int);;
 
 Type classes? I'm not sure about this, but type classes could be defined with the `class` keyword.
@@ -138,7 +142,7 @@ And then type class instances are defined via `instance Class T := {...}`?
 
     instance MyNum Int := {
       x +. y := x+y;
-      //...
+      --...
     };;
 
 The reason I'm skeptical about having type classes is because it will increase the complexity of the language (which is meant to be kept rather simple) and it will make type inference much harder. Essentially, it will require the programmer to write explicit type signatures a lot more. Now that isn't a bad thing at all, in fact it's a good thing for anyone that values type safety (so anyone familiar with functional programming), but in this case it's not desired because, as stated previously, this is meant to be a simple langauge to play around with.
@@ -149,4 +153,4 @@ Another thing to consider is whether or not to have lazy evaluation.
 
 One idea is to target LuaJIT by transpiling to Lua or generating LuaJIT bytecode directly.
 
-A better idea is to target the [GRIN compiler framework](https://github.com/grin-compiler/grin)
+A better idea is to target the [GRIN compiler framework](https:--github.com/grin-compiler/grin)
