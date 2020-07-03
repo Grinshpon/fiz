@@ -2,3 +2,7 @@ def x := 5;;
 def y := 1.2;;
 
 def foo := -2;;
+def bar := f x y;;
+def t := true;;
+
+def four := + 1 3;;

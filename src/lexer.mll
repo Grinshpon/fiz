@@ -6,7 +6,7 @@
 }
 
 let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' '-']*
-let operator = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':']+
+let operator = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':' '|' '\\']+
 
 let digit = ['0'-'9']
 let int = '-'? digit+
@@ -29,8 +29,12 @@ rule token = parse
   | "if" { IF }
   | "then" { THEN }
   | "else" { ELSE }
+  | "match" { MATCH }
   | '(' { LPAREN }
   | ')' { RPAREN }
+  | '{' { LBRACE }
+  | '}' { RBRACE }
+  | '|' { GUARD }
   | ":=" { ASSIGN }
   | '\\' { LAMBDA }
   | "->" { ARROW }

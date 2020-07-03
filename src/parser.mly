@@ -1,8 +1,9 @@
 %token DEF
 %token LET IN
 %token IF THEN ELSE
-%token LPAREN RPAREN
-%token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *)
+%token MATCH
+%token LPAREN RPAREN LBRACE RBRACE
+%token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *) GUARD (* | *)
 %token SEMI DSEMI
 %token <float> FLOAT
 %token <int> INT
@@ -55,9 +56,19 @@ expr:
     { `Let(l,e) }
   | IF c = expr THEN t = expr ELSE f = expr
     { `If(c,t,f) }
+  | MATCH e = expr LBRACE c = cases RBRACE
+    { `Match(e,c) }
   | a = app_expr
     { a }
   ;
+
+cases:
+  | GUARD? c = plain_expr ARROW e = expr SEMI GUARD cs = cases
+    { (c,e)::cs }
+  | c = plain_expr ARROW e = expr SEMI
+    { [(c,e)] }
+  ;
+
 
 app_expr:
   | e = plain_expr

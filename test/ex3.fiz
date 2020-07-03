@@ -1,1 +1,4 @@
-def max := \x y -> if > x y then x else y;;
+def ifn c t f := match c {
+  | true -> t;
+  | false -> f;
+};;
