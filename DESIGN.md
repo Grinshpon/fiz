@@ -28,16 +28,16 @@ Lists are delineated by square brackets `[a,b,...,z]`
 
     def myElem := myList # 1; // `#` is a function that retrieves the element at a given index.
 
-`case` is a builtin that provides pattern matching. `{..}` is a chunk.
+`match` is a builtin that provides pattern matching. `{..}` is a chunk.
 
-    def myIf c t f := case c {
+    def myIf c t f := match c {
       True -> t;
       False -> f;
     };;
 
-    def bar x y := case x {
+    def bar x y := match x {
       5  -> "five"; //x matches with 5
-      @y -> "eq"; //x matches with the value of the existing variable y
+      @y -> "eq"; //experimental: x matches with the value of the existing variable y
       y  -> "x is" ++ (show y); //x is bound to a new variable y, which overshadows the argument
     };;
 

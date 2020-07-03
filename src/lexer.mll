@@ -5,7 +5,7 @@
   exception SyntaxError of string
 }
 
-let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' '-']*
+let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' '-' '\'']*
 let operator = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':' '|' '\\']+
 
 let digit = ['0'-'9']

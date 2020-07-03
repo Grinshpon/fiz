@@ -2,3 +2,9 @@ def ifn c t f := match c {
   | true -> t;
   | false -> f;
 };;
+
+def positiveSum x y :=
+  let
+    x' := max x 0;
+    y' := max y 0;
+  in + x' y';;
