@@ -2,9 +2,9 @@
 %token LET IN
 %token IF THEN ELSE
 %token MATCH
-%token LPAREN RPAREN LBRACE RBRACE
+%token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
 %token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *) GUARD (* | *)
-%token SEMI DSEMI
+%token SEMI DSEMI COMMA
 %token <float> FLOAT
 %token <int> INT
 %token <string> IDENT
@@ -78,6 +78,8 @@ app_expr:
   ;
 
 plain_expr:
+  | LBRACKET l = list_expr RBRACKET
+    { `List l }
   | LPAREN e = expr RPAREN
     { e }
   | o = OP (* for now operators are prefix *)
@@ -90,6 +92,13 @@ plain_expr:
     { `Float n }
   | b = BOOL
     { `Bool b }
+  ;
+
+list_expr:
+  | e = expr COMMA lst = list_expr
+    { e::lst }
+  | e = expr COMMA?
+    { [e] }
   ;
 
 args:

@@ -8,7 +8,7 @@ type ty = [
   | `TFloat
   | `TBool
   | `TFunc of ty list
-  (* | `List of ty *)
+  | `TList of ty
 ]
 
 type expr = [
@@ -22,6 +22,7 @@ type expr = [
   | `Int of int
   | `Float of float
   | `Bool of bool
+  | `List of expr list
 ][@@deriving show]
 
 type command = [
