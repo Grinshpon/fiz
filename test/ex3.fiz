@@ -9,4 +9,4 @@ def positiveSum x y := -- comment after code
   let
     x' := max x 0;
     y' := max y 0;
-  in + x' y';;
+  in x' + y';;

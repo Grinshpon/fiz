@@ -4,13 +4,33 @@
 %token MATCH
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
 %token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *) GUARD (* | *)
+%token AND (* && *) OR (* || *)
 %token SEMI DSEMI COMMA
 %token <float> FLOAT
 %token <int> INT
 %token <string> IDENT
-%token <string> OP
+%token <string> PREFIXOP
+%token <string> INFIXOP0
+%token <string> INFIXOP1
+%token <string> INFIXOP2
+%token <string> INFIXOP3
+%token <string> INFIXOP4
 %token <bool> BOOL
 %token EOF
+
+/* Precedence/Associativity, pretty much taken from Ocaml parser:
+ * https://github.com/ocaml/ocaml/blob/trunk/parsing/parser.mly
+ */
+
+%right ARROW
+%right AND OR
+%left  INFIXOP0
+%right INFIXOP1
+%left  INFIXOP2
+%left  INFIXOP3
+%right INFIXOP4
+%nonassoc PREFIXOP
+
 
 %start <Ast.command list> prog
 
@@ -73,16 +93,26 @@ cases:
 app_expr:
   | e = plain_expr
     { e }
+  | op = op_expr
+    { op }
   | f = app_expr e = args
     { `App(f,e) }
   ;
+
+op_expr:
+  | p = PREFIXOP e = plain_expr
+    { `App((`Op p), [e]) }
+  | e1 = app_expr op = infix_op e2 = app_expr
+    { `App((`Op op),[e1;e2]) }
+  ;
+
 
 plain_expr:
   | LBRACKET l = list_expr RBRACKET
     { `List l }
   | LPAREN e = expr RPAREN
     { e }
-  | o = OP (* for now operators are prefix *)
+  | LPAREN o = op_id RPAREN
     { `Op o }
   | id = IDENT
     { `Ident id }
@@ -92,6 +122,29 @@ plain_expr:
     { `Float n }
   | b = BOOL
     { `Bool b }
+  ;
+
+op_id:
+  | p = PREFIXOP
+    { p }
+  | p = infix_op
+    { p }
+
+%inline infix_op:
+  | AND
+    { "&&" }
+  | OR
+    { "||" }
+  | i = INFIXOP0
+    { i }
+  | i = INFIXOP1
+    { i }
+  | i = INFIXOP2
+    { i }
+  | i = INFIXOP3
+    { i }
+  | i = INFIXOP4
+    { i }
   ;
 
 list_expr:

@@ -5,8 +5,16 @@
   exception SyntaxError of string
 }
 
-let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' '-' '\'']*
-let operator = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':' '|' '\\']+
+let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' ]* [ '\'' ]*
+
+
+let operator_rest = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':' '|' '~' '\\']+
+let prefix_op = [ '~' '!' ] operator_rest*
+let infix_op0 = ['=' '<' '>' '|' '&' '$'] operator_rest*
+let infix_op1 = ['@' '^' ':'] operator_rest*
+let infix_op2 = ['+' '-'] operator_rest*
+let infix_op3 = ['*' '/' '%' '#'] operator_rest*
+let infix_op4 = "**" operator_rest*
 
 let digit = ['0'-'9']
 let int = '-'? digit+
@@ -53,8 +61,24 @@ rule token = parse
     { BOOL (bool_of_string(b)) }
   | ident as id
     { IDENT id }
-  | operator as o
-    { OP o }
+  | "&&"
+    { AND }
+  | "||"
+    { OR }
+  | "~=" as i
+    { INFIXOP0 i }
+  | infix_op0 as i
+    { INFIXOP0 i }
+  | infix_op1 as i
+    { INFIXOP1 i }
+  | infix_op2 as i
+    { INFIXOP2 i }
+  | infix_op4 as i
+    { INFIXOP4 i }
+  | infix_op3 as i
+    { INFIXOP3 i }
+  | prefix_op as p
+    { PREFIXOP p }
   | eof { EOF }
 
 and comment = parse

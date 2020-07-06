@@ -4,8 +4,6 @@ The grammar can be seen by looking at the Ast module and the parser. I'll write 
 
 A .fiz file describes a fiz module, and each fiz module is a series of definitions. Modules are essentially namespaces, a file is a module taking it's name (so importing mod.fiz will give you a module named mod and you can access it's definitions using mod.name). You can also have local modules in a file that act as local namespaces. Also, in any project, there must be a main module containing a main function. 
 
-NOTE: All the examples below have operators done in infix notation. Currently all operators are prefixed. This may or may not change, and I will update the document accordingly once I settle on a definitive decision.
-
 Top level definitions are made with the `def` keyword. Assignment is done using the operator `:=`. `=` and `==` are synonyms and are used for comparison.
 
     def val := 1;;
