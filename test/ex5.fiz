@@ -2,7 +2,7 @@ def infix := 1 + 2 * 3;;
 
 def infix1 := 3 * 2 + 1;;
 
-def infix2 := 1 + 2^2 * 3;;
+def infix2 := 1 + 2**2 * 3;;
 
 def infix3 := true ~= false;;
 
