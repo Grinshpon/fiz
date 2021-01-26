@@ -1,0 +1,4 @@
+def add: Int -> Int -> Int;;
+let add x y := x + y;;
+
+def ls: List Int;;

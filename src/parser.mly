@@ -1,9 +1,13 @@
+%{
+  open Ast
+%}
+
 %token DEF
 %token LET IN
 %token IF THEN ELSE
 %token MATCH
 %token LPAREN RPAREN LBRACE RBRACE LBRACKET RBRACKET
-%token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *) GUARD (* | *)
+%token ASSIGN (* := *) LAMBDA (* \ *) ARROW (* -> *) GUARD (* | *) COLON (* : *)
 %token AND (* && *) OR (* || *)
 %token SEMI DSEMI COMMA
 %token <float> FLOAT
@@ -34,28 +38,35 @@
 
 %start <Ast.command list> prog
 
-%start <Ast.command option> toplevel
+(*%start <Ast.command list> toplevel*)
 %%
 
 
 prog:
   | EOF
     { [] }
-  | d = def EOF
+  | d = def DSEMI
     { [d] }
   | d = def DSEMI lst = prog
     { d::lst }
+  | l = let_top EOF
+    { [l] }
+  | l = let_top DSEMI lst = prog
+    { l::lst }
   | e = expr EOF
-    { [`Expr e] }
+    { [Expr e] }
   | e = expr DSEMI lst = prog
-    { (`Expr e)::lst }
+    { (Expr e)::lst }
   ;
 
 toplevel:
-  | d = def DSEMI
+(*  | d = def DSEMI
     { Some d }
+*)
+  | l = let_top DSEMI
+    { Some l }
   | e = expr DSEMI
-    { Some (`Expr e) }
+    { Some (Expr e) }
   | DSEMI
     { None }
   | EOF
@@ -63,21 +74,40 @@ toplevel:
   ;
 
 def:
-  | DEF x = IDENT ASSIGN e = expr
-    { `Def(x,e) }
-  | DEF x = IDENT p = params ASSIGN e = expr
-    { `Def(x, `Lambda(p,e)) } (* if expr is another lambda, have function to join them *)
+  | DEF x = IDENT COLON t = type_dec
+    { Def(x,t) }
+  ;
+
+type_dec:
+  | t = IDENT
+    { Type t }
+  | t = fn_ty
+    { t }
+  | t = IDENT ts = type_dec
+    { TCons(t, ts) }
+  ;
+
+fn_ty:
+  | t1 = type_dec ARROW t2 = type_dec
+    { FnType([t1;t2]) }
+  ;
+
+let_top:
+  | LET x = IDENT ASSIGN e = expr
+    { LetTop(x,e) }
+  | LET x = IDENT p = params ASSIGN e = expr
+    { LetTop(x, Lambda(p,e)) } (* if expr is another lambda, have function to join them *)
   ;
 
 expr:
   | LAMBDA a = params ARROW e = expr
-    { `Lambda(a,e) }
+    { Lambda(a,e) }
   | LET l = letassign IN e = expr
-    { `Let(l,e) }
+    { Let(l,e) }
   | IF c = expr THEN t = expr ELSE f = expr
-    { `If(c,t,f) }
+    { If(c,t,f) }
   | MATCH e = expr LBRACE c = cases RBRACE
-    { `Match(e,c) }
+    { Match(e,c) }
   | a = app_expr
     { a }
   ;
@@ -96,32 +126,32 @@ app_expr:
   | op = op_expr
     { op }
   | f = app_expr e = args
-    { `App(f,e) }
+    { App(f,e) }
   ;
 
 op_expr:
   | p = PREFIXOP e = plain_expr
-    { `App((`Op p), [e]) }
+    { App((Op p), [e]) }
   | e1 = app_expr op = infix_op e2 = app_expr
-    { `App((`Op op),[e1;e2]) }
+    { App((Op op),[e1;e2]) }
   ;
 
 
 plain_expr:
   | LBRACKET l = list_expr RBRACKET
-    { `List l }
+    { List l }
   | LPAREN e = expr RPAREN
     { e }
   | LPAREN o = op_id RPAREN
-    { `Op o }
+    { Op o }
   | id = IDENT
-    { `Ident id }
+    { Ident id }
   | n = INT
-    { `Int n }
+    { Int n }
   | n = FLOAT
-    { `Float n }
+    { Float n }
   | b = BOOL
-    { `Bool b }
+    { Bool b }
   ;
 
 op_id:
@@ -131,6 +161,7 @@ op_id:
     { p }
 
 %inline infix_op:
+  (*| ARROW*)
   | AND
     { "&&" }
   | OR

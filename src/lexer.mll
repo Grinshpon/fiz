@@ -11,7 +11,7 @@ let ident = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_' ]* [ '\'' ]*
 let operator_rest = [ '+' '-' '*' '/' '^' '=' '!' '#' '$' '<' '>' ':' '|' '~' '\\']+
 let prefix_op = [ '~' '!' ] operator_rest*
 let infix_op0 = ['=' '<' '>' '|' '&' '$'] operator_rest*
-let infix_op1 = ['@' '^' ':'] operator_rest*
+let infix_op1 = ['@' '^' (*':'*)] operator_rest*
 let infix_op2 = ['+' '-'] operator_rest*
 let infix_op3 = ['*' '/' '%' '#'] operator_rest*
 let infix_op4 = "**" operator_rest*
@@ -49,6 +49,7 @@ rule token = parse
   | ',' { COMMA }
   | '|' { GUARD }
   | ":=" { ASSIGN }
+  | ":" { COLON }
   | '\\' { LAMBDA }
   | "->" { ARROW }
   | ";;" { DSEMI }

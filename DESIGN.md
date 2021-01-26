@@ -4,40 +4,40 @@ The grammar can be seen by looking at the Ast module and the parser. I'll write 
 
 A .fiz file describes a fiz module, and each fiz module is a series of definitions. Modules are essentially namespaces, a file is a module taking it's name (so importing mod.fiz will give you a module named mod and you can access it's definitions using mod.name). You can also have local modules in a file that act as local namespaces. Also, in any project, there must be a main module containing a main function. 
 
-Top level definitions are made with the `def` keyword. Assignment is done using the operator `:=`. `=` and `==` are synonyms and are used for comparison.
+Top level declarations are made with the `let` keyword. Assignment is done using the operator `:=`. `=` and `==` are synonyms and are used for comparison.
 
-    def val := 1;;
+    let val := 1;;
 
 Functions are defined the same way. Functions are first class and treated like values.
 
-    def foo x := x + 5;;
+    let foo x := x + 5;;
 
 Fiz does not use whitespace as part of the grammar (like languages such as haskell or python do), and so each definition is separated by a double semicolon:
 
-    def y := 5;; def x := 6;;
+    let y := 5;; let x := 6;;
 
 Comments begin with `--` and end at the end of a line. There are no block comments.
 
-    def id x := x;; -- this is a comment
+    let id x := x;; -- this is a comment
 
 Lambda functions are defined with `\ ... -> ...`.
 
-    def foo := \x -> x + 5;;
+    let foo := \x -> x + 5;;
 
 Lists are delineated by square brackets `[a,b,...,z]`
 
-    def myList := [1,2,3];;
+    let myList := [1,2,3];;
 
-    def myElem := myList # 1; -- `#` is a function that retrieves the element at a given index.
+    let myElem := myList # 1; -- `#` is a function that retrieves the element at a given index.
 
 `match` is a builtin that provides pattern matching. `{..}` is a chunk.
 
-    def myIf c t f := match c {
+    let myIf c t f := match c {
       True -> t;
       False -> f;
     };;
 
-    def bar x y := match x {
+    let bar x y := match x {
       5  -> "five"; --x matches with 5
       @y -> "eq"; --experimental: x matches with the value of the existing variable y
       y  -> "x is" ++ (show y); --x is bound to a new variable y, which overshadows the argument
@@ -45,19 +45,22 @@ Lists are delineated by square brackets `[a,b,...,z]`
 
 `let ... in ...` is another builtin that lets you define local immutable variables to use.
 
-    def baz x := let y := x + 5 in y;;
+    let baz x := let y := x + 5 in y;;
 
-    def positiveSum x y :=
+    let positiveSum x y :=
       let
         x' := max x 0;
         y' := max y 0;
       in x' + y';;
 
-functions are pure unless operating in an io context. I don't know what io or monad situation will look like exactly.
+While types are inferred, you can declare a top level value with a type signature using the `def` keyword:
 
-`do {..}` is an io block where you can write side-effectful code, allowing you to use locally scoped mutable variables `var x := 1; set x := x + 1`
+    def add: Int -> Int -> Int;;
+    let add x y = x + y;;
 
-    def main := do {
+`do {..}` is a block where you can write code in a procedural manner, allowing you to use locally scoped mutable variables `var x := 1; set x := x + 1`
+
+    let main := do {
       var x := 2;
       print (bar 1 x);
       set x := x+1;
@@ -83,7 +86,7 @@ Custom types are defined with `type T := ...`.
 Modules are made with the `module` keyword.
 
     module Inner := {
-      def innerVal := ...;
+      let innerVal := ...;
     };;
 
 If a module does not specify what is is exporting, it is assumed to be exporting everything. Otherwise, `export` will state what is public and what is private. If a module has an `export`, it must be the first expression.
@@ -94,10 +97,10 @@ If a module does not specify what is is exporting, it is assumed to be exporting
       fn1;
       Inner;
     };;
-    def val1 := ...;;
-    def val2 := ...;;
-    def fn1 x := ...;;
-    def fn2 := ...;;
+    let val1 := ...;;
+    let val2 := ...;;
+    let fn1 x := ...;;
+    let fn2 := ...;;
     module Inner := { ... };;
 
 An alias is essentially text substitution. Any type (and maybe even keywords) can be aliased.
@@ -114,17 +117,17 @@ This section contains designs of the language that I'm less comfortable with or 
 
 Funcions might have statement-like forms by prefacing additional keywords with `'` (or some other symbol)
 
-    def myIf cond 'myThen f 'myElse g := if cond then f else g;;
+    let myIf cond 'myThen f 'myElse g := if cond then f else g;;
 
-    def isOne x := myIf x = 1 myThen "is one" myElse "is not one";;
+    let isOne x := myIf x = 1 myThen "is one" myElse "is not one";;
 
 
 Fiz will be statically typed, but types do not need to be specified most of the time, that's handled by type inference. (WIP) Types may be annotated with `:`
 
-    def foo x: Int -> Int := x + (5: Int);;
+    let foo x: Int -> Int := x + (5: Int);;
 
     --NOTE: alternate potential syntax for type annotations:
-      def foo (x: Int): Int := x + (5: Int);;
+      let foo (x: Int): Int := x + (5: Int);;
 
 Type classes? I'm not sure about this, but type classes could be defined with the `class` keyword.
 

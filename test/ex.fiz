@@ -1,8 +1,8 @@
-def x := 5;;
-def y := 1.2;;
+let x := 5;;
+let y := 1.2;;
 
-def foo := -2;;
-def bar := f x y;;
-def t := true;;
+let foo := -2;;
+let bar := f x y;;
+let t := true;;
 
-def four := + 1 3;;
+let four := 1 + 3;;

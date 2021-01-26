@@ -1,11 +1,11 @@
-def ifn c t f := match c {
+let ifn c t f := match c {
   | true -> t;
   | false -> f;
 };;
 
 -- this is a comment
 
-def positiveSum x y := -- comment after code
+let positiveSum x y := -- comment after code
   let
     x' := max x 0;
     y' := max y 0;

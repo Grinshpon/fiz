@@ -1,13 +1,13 @@
-def infix := 1 + 2 * 3;;
+let infix := 1 + 2 * 3;;
 
-def infix1 := 3 * 2 + 1;;
+let infix1 := 3 * 2 + 1;;
 
-def infix2 := 1 + 2**2 * 3;;
+let infix2 := 1 + 2**2 * 3;;
 
-def infix3 := true ~= false;;
+let infix3 := true ~= false;;
 
-def infix4 := x > y && y < x || x = y;;
+let infix4 := x > y && y < x || x = y;;
 
-def cons x xs := x::xs;;
+let cons x xs := x::xs;;
 
-def op := (+) 1 2;;
+let op := (+) 1 2;;
