@@ -146,9 +146,11 @@ And then type class instances are defined via `instance Class T := {...}`?
       --...
     };;
 
-The reason I'm skeptical about having type classes is because it will increase the complexity of the language (which is meant to be kept rather simple) and it will make type inference much harder. Essentially, it will require the programmer to write explicit type signatures a lot more. Now that isn't a bad thing at all, in fact it's a good thing for anyone that values type safety (so anyone familiar with functional programming), but in this case it's not desired because, as stated previously, this is meant to be a simple langauge to play around with.
+The reason I'm skeptical about having type classes is because it will increase the complexity of the language (which is meant to be kept rather simple) and it will make type inference much harder. Essentially, it will require the programmer to write explicit type signatures a lot more. Now that isn't a bad thing at all, in fact it's a good thing for anyone that values type safety (so anyone familiar with functional programming), but in this case it's not desired because, as stated previously, this is meant to be a simple langauge to play around with, and a learning exercise for me to implement a type checker with type inference.
 
 Another thing to consider is whether or not to have lazy evaluation.
+
+Another thing is mutation. Referential transparency is a neat thing to have, so maybe a restriction can be placed on mutation, like, variables can be modified only in the exact scope that they were declared in.
 
 ## Compiler Ideas
 
